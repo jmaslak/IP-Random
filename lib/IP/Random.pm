@@ -9,7 +9,7 @@ package IP::Random v0.01.00;
 
 # ABSTRACT: Generate IP Addresses Randomly
 
-=head SYNOPSIS
+=head1 SYNOPSIS
 
   use IP::Random qw(random_ipv4);
 
@@ -59,7 +59,7 @@ my $DEFAULT_IPV4_EXCLUDE = {
 =func random_ipv4()
 
 Returns a random IPv4 address to the caller (as a scalar string - I.E.
-in the format "1.2.3.4").  There are two named optional parameters
+in the format "1.2.3.4").  There are several named optional parameters
 available:
 
 =over 4
@@ -263,7 +263,7 @@ sub _get_ipv4_excludes( $addl_types ) {
     return \@ret;
 }
 
-=item in_ipv4_subnet($subnet_cidr, $ip)
+=func in_ipv4_subnet($subnet_cidr, $ip)
 
 This is a helper function that tests whether an IP (passed as a string
 in the format "192.0.2.1") is in a subnet passed in string CIDR
@@ -306,7 +306,7 @@ sub in_ipv4_subnet ( $sub_cidr, $ip ) {
     return undef;
 }
 
-=item default_ipv4_exclude()
+=func default_ipv4_exclude()
 
 Returns the default exclude list for IPv4, as a list reference
 containing CIDR strings.
@@ -388,7 +388,7 @@ sub default_ipv4_exclude() {
 
 1;
 
-=head TODO AND BUGS
+=head1 TODO AND BUGS
 
 This version uses a pretty ugly algorithm to generate the IP addresses.
 It's basically generating a unique IP address and then testing against

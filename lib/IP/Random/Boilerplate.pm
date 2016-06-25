@@ -21,7 +21,9 @@ This module sets some default imports, and turns on the strictures I've
 come to rely upon.
 
 =head1 WARNINGS
+
 This module makes significant changes in the calling package!
+
 =cut
 
 use v5.20;
