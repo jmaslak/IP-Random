@@ -388,3 +388,26 @@ sub default_ipv4_exclude() {
 
 1;
 
+=head TODO AND BUGS
+
+This version uses a pretty ugly algorithm to generate the IP addresses.
+It's basically generating a unique IP address and then testing against
+the exclude list.  It'll probably be a lot nicer to call the random
+function in a way that minimizes the amount of unnecessary calls (I.E.
+the first call shoudln't generally ask for an integer between zero and
+255 since only 1 to 223 is actually allowable).  A better approach
+would be to figure out how many IP addresses are available to be returned
+and then select a random one of those (basically a pick).
+
+Methods to efficiently select non-duplicate IPs should be available.  If
+the above is done, this should be reasonably feasible.
+
+An OO interface may be nice to minimize per-call processing each time the
+above are done.
+
+It should be possible to provide ranges that are acceptable to use for
+the generated IPs.  Basically the opposite of "exclude" (but excludes
+should be applied afterwards still).
+
+I have plans to port this to Perl 6.
+
