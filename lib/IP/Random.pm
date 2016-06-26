@@ -40,19 +40,19 @@ use Socket qw(inet_pton AF_INET);
 my $DEFAULT_IPV4_EXCLUDE = {
     '0.0.0.0/8'          => 'rfc1122',
     '10.0.0.0/8'         => 'rfc1918',
-    '100.64.0.0/10',     => 'rfc6598',
-    '127.0.0.0/8',       => 'rfc1122',
-    '169.254.0.0/16',    => 'rfc3927',
-    '172.16.0.0/12',     => 'rfc1918',
-    '192.0.0.0/24',      => 'rfc5736',
-    '192.0.2.0/24',      => 'rfc5737',
-    '192.88.99.0/24',    => 'rfc3068',
-    '192.168.0.0/16',    => 'rfc1918',
-    '198.18.0.0/15',     => 'rfc2544',
-    '198.51.100.0/24',   => 'rfc5737',
-    '203.0.113.0/24',    => 'rfc5737',
-    '224.0.0.0/4',       => 'rfc3171',
-    '240.0.0.0/4',       => 'rfc1112',
+    '100.64.0.0/10'      => 'rfc6598',
+    '127.0.0.0/8'        => 'rfc1122',
+    '169.254.0.0/16'     => 'rfc3927',
+    '172.16.0.0/12'      => 'rfc1918',
+    '192.0.0.0/24'       => 'rfc5736',
+    '192.0.2.0/24'       => 'rfc5737',
+    '192.88.99.0/24'     => 'rfc3068',
+    '192.168.0.0/16'     => 'rfc1918',
+    '198.18.0.0/15'      => 'rfc2544',
+    '198.51.100.0/24'    => 'rfc5737',
+    '203.0.113.0/24'     => 'rfc5737',
+    '224.0.0.0/4'        => 'rfc3171',
+    '240.0.0.0/4'        => 'rfc1112',
     '255.255.255.255/32' => 'rfc919',
 };
 
@@ -218,12 +218,11 @@ sub random_ipv4 ( %args ) {
     $args{additional_exclude}       //= [];
 
     # What are valid option names?
-    my $optre =
-      qr/\A(?:rand|exclude|additional_(?:types_allowed|exclude))\z/;
+    my $optre = qr/\A(?:rand|exclude|additional_(?:types_allowed|exclude))\z/;
 
     # Make sure all options are valid
     if ( notall { m/$optre/ } keys %args ) {
-        my (@bad) = grep { ! m/$optre/ } keys %args;
+        my (@bad) = grep { !m/$optre/ } keys %args;
         croak( "unknown named argument passed to random_ipv4: " . $bad[0] );
     }
 
@@ -243,7 +242,7 @@ sub random_ipv4 ( %args ) {
     do {
         my @parts;
         for my $octet ( 1 .. 4 ) {
-            push @parts, $args{rand}->(255,$octet);
+            push @parts, $args{rand}->( 255, $octet );
         }
         $addr = join '.', @parts;
     } until $is_not_excluded->($addr);
@@ -282,8 +281,8 @@ Example, which returns a true value:
 =cut
 
 sub in_ipv4_subnet ( $sub_cidr, $ip ) {
-    if (!defined($sub_cidr)) { confess("subnet_cidr is not defined"); }
-    if (!defined($ip))       { confess("ip is not defined"); }
+    if ( !defined($sub_cidr) ) { confess("subnet_cidr is not defined"); }
+    if ( !defined($ip) )       { confess("ip is not defined"); }
 
     if ( $sub_cidr !~ m/\A(?:[\d\.]+)(?:\/(?:\d+))?\z/ ) {
         confess("$sub_cidr is not in the format A.B.C.D/N");
