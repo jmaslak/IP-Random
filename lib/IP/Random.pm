@@ -174,10 +174,6 @@ Multicast (C<224.0.0.0/4>)
 
 Link local (C<169.254.0.0/16>)
 
-=item rfc6598
-
-Shared address space / Carrier NAT (C<100.64.0.0/10>)
-
 =item rfc5736
 
 IETF protocol assignments (C<192.0.0.0/24>)
@@ -185,6 +181,10 @@ IETF protocol assignments (C<192.0.0.0/24>)
 =item rfc5737
 
 Documentation Addresses (C<192.0.2.0/24>, C<198.51.100.0/24>, C<203.0.113.0/24>)
+
+=item rfc6598
+
+Shared address space / Carrier NAT (C<100.64.0.0/10>)
 
 =back
 
