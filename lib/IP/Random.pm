@@ -189,8 +189,9 @@ Shared address space / Carrier NAT (C<100.64.0.0/10>)
 =back
 
 A typical use might be to include C<10.x.x.x> RFC1918 addresses among
-possible addresses to return.  This example excludes C<10.x.x.x> while
-continuing to include 172.16.0.0/12 and C<192.168.0.0/16>:
+possible addresses to return.  This example allows addresses in the
+C<10.x.x.x> range while continuing to exclude C<172.16.0.0/12> and
+C<192.168.0.0/16>:
 
   my $ipv4 = random_ipvr(
     additional_types_allowed => [ 'rfc1918' ],
