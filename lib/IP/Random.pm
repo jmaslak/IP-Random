@@ -35,7 +35,7 @@ for information on how to substitute a different random number function.
 use IP::Random::Boilerplate;
 
 use List::Util qw(none notall pairs);
-use Socket qw(inet_pton AF_INET);
+use Socket qw(inet_aton);
 
 my $DEFAULT_IPV4_EXCLUDE = {
     '0.0.0.0/8'          => 'rfc1122',
@@ -290,8 +290,8 @@ sub in_ipv4_subnet ( $sub_cidr, $ip ) {
     my ( $sub_net, $sub_mask ) = $sub_cidr =~ m/\A([\d\.]+)(?:\/(\d+))?\z/ms;
     $sub_mask //= 32;
 
-    my $addr = unpack( 'N', inet_pton( AF_INET, $ip ) );
-    my $sub  = unpack( 'N', inet_pton( AF_INET, $sub_net ) );
+    my $addr = unpack( 'N', inet_aton( $ip ) );
+    my $sub  = unpack( 'N', inet_aton( $sub_net ) );
 
     my $mask = 0;
     for ( 1 .. $sub_mask ) {
@@ -408,6 +408,9 @@ above are done.
 It should be possible to provide ranges that are acceptable to use for
 the generated IPs.  Basically the opposite of "exclude" (but excludes
 should be applied afterwards still).
+
+Probe for existance of inet_pton for IPv6 - if it isn't there, use pure
+Perl code.
 
 I have plans to port this to Perl 6.
 

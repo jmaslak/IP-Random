@@ -1,3 +1,8 @@
+1.001 - June 26, 2016
+Joel C. Maslak <jmaslak@antelope.net>
+ * Apparently some versions of Windows don't have working inet_pton()
+   functions.  Worked-around with inet_aton().
+
 1.000 - June 25, 2016
 Joel C. Maslak <jmaslak@antelope.net>
  * Initial Version
