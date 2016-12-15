@@ -42,24 +42,24 @@ no warnings 'experimental::signatures';
 
 use Carp;
 use List::Util qw(none notall pairs);
-use Socket qw(inet_pton AF_INET);
+use Socket qw(inet_aton);
 
 my $DEFAULT_IPV4_EXCLUDE = {
     '0.0.0.0/8'          => 'rfc1122',
     '10.0.0.0/8'         => 'rfc1918',
-    '100.64.0.0/10',     => 'rfc6598',
-    '127.0.0.0/8',       => 'rfc1122',
-    '169.254.0.0/16',    => 'rfc3927',
-    '172.16.0.0/12',     => 'rfc1918',
-    '192.0.0.0/24',      => 'rfc5736',
-    '192.0.2.0/24',      => 'rfc5737',
-    '192.88.99.0/24',    => 'rfc3068',
-    '192.168.0.0/16',    => 'rfc1918',
-    '198.18.0.0/15',     => 'rfc2544',
-    '198.51.100.0/24',   => 'rfc5737',
-    '203.0.113.0/24',    => 'rfc5737',
-    '224.0.0.0/4',       => 'rfc3171',
-    '240.0.0.0/4',       => 'rfc1112',
+    '100.64.0.0/10'      => 'rfc6598',
+    '127.0.0.0/8'        => 'rfc1122',
+    '169.254.0.0/16'     => 'rfc3927',
+    '172.16.0.0/12'      => 'rfc1918',
+    '192.0.0.0/24'       => 'rfc5736',
+    '192.0.2.0/24'       => 'rfc5737',
+    '192.88.99.0/24'     => 'rfc3068',
+    '192.168.0.0/16'     => 'rfc1918',
+    '198.18.0.0/15'      => 'rfc2544',
+    '198.51.100.0/24'    => 'rfc5737',
+    '203.0.113.0/24'     => 'rfc5737',
+    '224.0.0.0/4'        => 'rfc3171',
+    '240.0.0.0/4'        => 'rfc1112',
     '255.255.255.255/32' => 'rfc919',
 };
 
@@ -181,10 +181,6 @@ Multicast (C<224.0.0.0/4>)
 
 Link local (C<169.254.0.0/16>)
 
-=item rfc6598
-
-Shared address space / Carrier NAT (C<100.64.0.0/10>)
-
 =item rfc5736
 
 IETF protocol assignments (C<192.0.0.0/24>)
@@ -193,11 +189,16 @@ IETF protocol assignments (C<192.0.0.0/24>)
 
 Documentation Addresses (C<192.0.2.0/24>, C<198.51.100.0/24>, C<203.0.113.0/24>)
 
+=item rfc6598
+
+Shared address space / Carrier NAT (C<100.64.0.0/10>)
+
 =back
 
 A typical use might be to include C<10.x.x.x> RFC1918 addresses among
-possible addresses to return.  This example excludes C<10.x.x.x> while
-continuing to include 172.16.0.0/12 and C<192.168.0.0/16>:
+possible addresses to return.  This example allows addresses in the
+C<10.x.x.x> range while continuing to exclude C<172.16.0.0/12> and
+C<192.168.0.0/16>:
 
   my $ipv4 = random_ipvr(
     additional_types_allowed => [ 'rfc1918' ],
@@ -224,12 +225,11 @@ sub random_ipv4 ( %args ) {
     $args{additional_exclude}       //= [];
 
     # What are valid option names?
-    my $optre =
-      qr/\A(?:rand|exclude|additional_(?:types_allowed|exclude))\z/;
+    my $optre = qr/\A(?:rand|exclude|additional_(?:types_allowed|exclude))\z/;
 
     # Make sure all options are valid
     if ( notall { m/$optre/ } keys %args ) {
-        my (@bad) = grep { ! m/$optre/ } keys %args;
+        my (@bad) = grep { !m/$optre/ } keys %args;
         croak( "unknown named argument passed to random_ipv4: " . $bad[0] );
     }
 
@@ -249,7 +249,7 @@ sub random_ipv4 ( %args ) {
     do {
         my @parts;
         for my $octet ( 1 .. 4 ) {
-            push @parts, $args{rand}->(255,$octet);
+            push @parts, $args{rand}->( 255, $octet );
         }
         $addr = join '.', @parts;
     } until $is_not_excluded->($addr);
@@ -288,8 +288,8 @@ Example, which returns a true value:
 =cut
 
 sub in_ipv4_subnet ( $sub_cidr, $ip ) {
-    if (!defined($sub_cidr)) { confess("subnet_cidr is not defined"); }
-    if (!defined($ip))       { confess("ip is not defined"); }
+    if ( !defined($sub_cidr) ) { confess("subnet_cidr is not defined"); }
+    if ( !defined($ip) )       { confess("ip is not defined"); }
 
     if ( $sub_cidr !~ m/\A(?:[\d\.]+)(?:\/(?:\d+))?\z/ ) {
         confess("$sub_cidr is not in the format A.B.C.D/N");
@@ -297,8 +297,8 @@ sub in_ipv4_subnet ( $sub_cidr, $ip ) {
     my ( $sub_net, $sub_mask ) = $sub_cidr =~ m/\A([\d\.]+)(?:\/(\d+))?\z/ms;
     $sub_mask //= 32;
 
-    my $addr = unpack( 'N', inet_pton( AF_INET, $ip ) );
-    my $sub  = unpack( 'N', inet_pton( AF_INET, $sub_net ) );
+    my $addr = unpack( 'N', inet_aton( $ip ) );
+    my $sub  = unpack( 'N', inet_aton( $sub_net ) );
 
     my $mask = 0;
     for ( 1 .. $sub_mask ) {

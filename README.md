@@ -4,7 +4,7 @@ IP::Random - Generate IP Addresses Randomly
 
 # VERSION
 
-version 1.001
+version 1.002
 
 # SYNOPSIS
 
@@ -137,10 +137,6 @@ available:
 
         Link local (`169.254.0.0/16`)
 
-    - rfc6598
-
-        Shared address space / Carrier NAT (`100.64.0.0/10`)
-
     - rfc5736
 
         IETF protocol assignments (`192.0.0.0/24`)
@@ -149,9 +145,14 @@ available:
 
         Documentation Addresses (`192.0.2.0/24`, `198.51.100.0/24`, `203.0.113.0/24`)
 
+    - rfc6598
+
+        Shared address space / Carrier NAT (`100.64.0.0/10`)
+
     A typical use might be to include `10.x.x.x` RFC1918 addresses among
-    possible addresses to return.  This example excludes `10.x.x.x` while
-    continuing to include 172.16.0.0/12 and `192.168.0.0/16`:
+    possible addresses to return.  This example allows addresses in the
+    `10.x.x.x` range while continuing to exclude `172.16.0.0/12` and
+    `192.168.0.0/16`:
 
         my $ipv4 = random_ipvr(
           additional_types_allowed => [ 'rfc1918' ],
