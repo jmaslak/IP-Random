@@ -1,3 +1,13 @@
+1.001 - December 14, 2016
+Joel C. Maslak <jmaslak@antelope.net>
+ * Fixed module version duplicate definition (reported by Kevin Phair)
+ * Rather than using JCM::Bootstrap, just include necessary pragmas
+   to make this somewhat less heavyweight
+ * Removed postderef pragma and replaced experimental syntax with
+   standard syntax.
+ * There should be no functional differences between this and
+   version 1.000.
+
 1.000 - June 25, 2016
 Joel C. Maslak <jmaslak@antelope.net>
  * Initial Version
