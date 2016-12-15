@@ -4,7 +4,7 @@ IP::Random - Generate IP Addresses Randomly
 
 # VERSION
 
-version 1.000
+version 1.001
 
 # SYNOPSIS
 
@@ -269,6 +269,10 @@ above are done.
 It should be possible to provide ranges that are acceptable to use for
 the generated IPs.  Basically the opposite of "exclude" (but excludes
 should be applied afterwards still).
+
+IPv6 support must be added.  IPv4 is a subset of IPv6, so there should
+be one set of pick functions and the like, with wrappers to handle
+conversion of IPv4 to IPv6 and back, when needed.
 
 I have plans to port this to Perl 6.
 

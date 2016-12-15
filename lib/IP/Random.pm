@@ -5,7 +5,7 @@
 # All Rights Reserved - See License
 #
 
-package IP::Random v0.01.00;
+package IP::Random;
 
 # ABSTRACT: Generate IP Addresses Randomly
 
@@ -32,8 +32,15 @@ for information on how to substitute a different random number function.
 
 =cut
 
-use IP::Random::Boilerplate;
+# Some boilerplate
+use v5.20;
+use strict;
+use warnings;
 
+use feature 'signatures';
+no warnings 'experimental::signatures';
+
+use Carp;
 use List::Util qw(none notall pairs);
 use Socket qw(inet_pton AF_INET);
 
@@ -233,7 +240,7 @@ sub random_ipv4 ( %args ) {
     }
 
     # Build a closure for checking to see if an address is excluded
-    my (@exclude_all) = ( $args{exclude}->@*, $args{additional_exclude}->@* );
+    my (@exclude_all) = ( @{ $args{exclude} }, @{ $args{additional_exclude} } );
     my $is_not_excluded = sub($addr) {
         none { in_ipv4_subnet( $_, $addr ) } @exclude_all;
     };
@@ -257,8 +264,8 @@ sub random_ipv4 ( %args ) {
 sub _get_ipv4_excludes( $addl_types ) {
     my @ret = grep {
         my $k = $_;
-        none { $DEFAULT_IPV4_EXCLUDE->{$k} eq $_ } $addl_types->@*
-    } keys $DEFAULT_IPV4_EXCLUDE->%*;
+        none { $DEFAULT_IPV4_EXCLUDE->{$k} eq $_ } @{ $addl_types }
+    } keys %{ $DEFAULT_IPV4_EXCLUDE };
 
     return \@ret;
 }
@@ -408,6 +415,10 @@ above are done.
 It should be possible to provide ranges that are acceptable to use for
 the generated IPs.  Basically the opposite of "exclude" (but excludes
 should be applied afterwards still).
+
+IPv6 support must be added.  IPv4 is a subset of IPv6, so there should
+be one set of pick functions and the like, with wrappers to handle
+conversion of IPv4 to IPv6 and back, when needed.
 
 I have plans to port this to Perl 6.
 
