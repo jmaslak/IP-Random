@@ -4,7 +4,7 @@ IP::Random - Generate IP Addresses Randomly
 
 # VERSION
 
-version 1.002
+version 1.003
 
 # SYNOPSIS
 
