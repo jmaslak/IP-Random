@@ -279,11 +279,11 @@ I have plans to port this to Perl 6.
 
 # AUTHOR
 
-J. Maslak <jmaslak@antelope.net>
+Joelle Maslak <jmaslak@antelope.net>
 
 # COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2016 by J. Maslak.
+This software is Copyright (c) 2016 by Joelle Maslak.
 
 This is free software, licensed under:
 
