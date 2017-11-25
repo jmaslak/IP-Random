@@ -213,10 +213,8 @@ sub random_ipv4 ( %args ) {
     $args{rand} //= sub { int( rand( shift() + 1 ) ) };
 
     # Can't have exclude and additional_types_allowed both existing
-    if ( exists( $args{exclude} ) && exists( $args{additional_types_allowed} ) )
-    {
-        croak(  "Cannot define both 'exclude' and "
-              . "'additional_types_allowed' parameters" );
+    if ( exists( $args{exclude} ) && exists( $args{additional_types_allowed} ) ) {
+        croak( "Cannot define both 'exclude' and " . "'additional_types_allowed' parameters" );
     }
 
     # This saves us some later branches
@@ -264,8 +262,8 @@ sub random_ipv4 ( %args ) {
 sub _get_ipv4_excludes( $addl_types ) {
     my @ret = grep {
         my $k = $_;
-        none { $DEFAULT_IPV4_EXCLUDE->{$k} eq $_ } @{ $addl_types }
-    } keys %{ $DEFAULT_IPV4_EXCLUDE };
+        none { $DEFAULT_IPV4_EXCLUDE->{$k} eq $_ } @{$addl_types}
+    } keys %{$DEFAULT_IPV4_EXCLUDE};
 
     return \@ret;
 }
@@ -297,8 +295,8 @@ sub in_ipv4_subnet ( $sub_cidr, $ip ) {
     my ( $sub_net, $sub_mask ) = $sub_cidr =~ m/\A([\d\.]+)(?:\/(\d+))?\z/ms;
     $sub_mask //= 32;
 
-    my $addr = unpack( 'N', inet_aton( $ip ) );
-    my $sub  = unpack( 'N', inet_aton( $sub_net ) );
+    my $addr = unpack( 'N', inet_aton($ip) );
+    my $sub  = unpack( 'N', inet_aton($sub_net) );
 
     my $mask = 0;
     for ( 1 .. $sub_mask ) {
@@ -310,7 +308,7 @@ sub in_ipv4_subnet ( $sub_cidr, $ip ) {
         return 1;
     }
 
-    return undef;
+    return;
 }
 
 =func default_ipv4_exclude()

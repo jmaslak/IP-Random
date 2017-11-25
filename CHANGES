@@ -1,3 +1,8 @@
+1.005 - November 25, 2017 (Not publicly released)
+Joelle Maslak <jmaslak@antelope.net>
+ * Fix minor critic errors
+ * Add Kwalitee and Critic tests
+
 1.004 - October 30, 2017
 Joelle Maslak <jmaslak@antelope.net>
  * Minor change to author name
