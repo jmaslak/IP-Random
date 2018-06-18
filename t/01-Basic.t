@@ -2,7 +2,7 @@
 # Yes, we want to make sure things work in taint mode
 
 #
-# Copyright (C) 2016 Joelle Maslak
+# Copyright (C) 2016-2018 Joelle Maslak
 # All Rights Reserved - See License
 #
 
@@ -11,13 +11,12 @@ use warnings;
 use autodie;
 
 use Carp;
-use Test::More;
-use Test::Exception;
+use Test2::V0;
 
 use List::Util qw(none);
 
 # Instantiate the object
-require_ok('IP::Random');
+use IP::Random;
 
 # Make sure in_ipv4_subnet works
 ok(IP::Random::in_ipv4_subnet('127.0.0.0/8', '127.0.0.0'), "127.0.0.0/8 includes 127.0.0.0");
