@@ -289,10 +289,10 @@ sub in_ipv4_subnet ( $sub_cidr, $ip ) {
     if ( !defined($sub_cidr) ) { confess("subnet_cidr is not defined"); }
     if ( !defined($ip) )       { confess("ip is not defined"); }
 
-    if ( $sub_cidr !~ m/\A(?:[\d\.]+)(?:\/(?:\d+))?\z/ ) {
+    if ( $sub_cidr !~ m/\A(?:[0-9\.]+)(?:\/(?:[0-9]+))?\z/ ) {
         confess("$sub_cidr is not in the format A.B.C.D/N");
     }
-    my ( $sub_net, $sub_mask ) = $sub_cidr =~ m/\A([\d\.]+)(?:\/(\d+))?\z/ms;
+    my ( $sub_net, $sub_mask ) = $sub_cidr =~ m/\A([0-9\.]+)(?:\/([0-9]+))?\z/ms;
     $sub_mask //= 32;
 
     my $addr = unpack( 'N', inet_aton($ip) );
