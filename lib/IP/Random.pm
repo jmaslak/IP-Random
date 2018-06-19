@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #
-# Copyright (C) 2016 Joelle Maslak
+# Copyright (C) 2016-2018 Joelle Maslak
 # All Rights Reserved - See License
 #
 
