@@ -1,5 +1,6 @@
 1.006 - ????
  * Add Code of Conduct & contribution information
+ * Do not allow non-ASCII7 characters in CIDRs
 
 1.005 - November 25, 2017 (Not publicly released)
 Joelle Maslak <jmaslak@antelope.net>
