@@ -4,7 +4,7 @@ IP::Random - Generate IP Addresses Randomly
 
 # VERSION
 
-version 1.005
+version 1.006
 
 # SYNOPSIS
 
@@ -283,7 +283,7 @@ Joelle Maslak <jmaslak@antelope.net>
 
 # COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2017 by Joelle Maslak.
+This software is Copyright (c) 2018 by Joelle Maslak.
 
 This is free software, licensed under:
 
