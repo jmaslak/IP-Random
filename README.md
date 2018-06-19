@@ -186,7 +186,7 @@ This list contains:
 
 - 0.0.0.0/8
 
-    "This" Network (RFC 1122, Section 3.2.1.3)
+    "This" Network (RFC1122, Section 3.2.1.3)
 
 - 10.0.0.0/8
 
@@ -198,7 +198,7 @@ This list contains:
 
 - 127.0.0.0/8
 
-    Loopback (RFC 1122, Section 3.2.1.3)
+    Loopback (RFC1122, Section 3.2.1.3)
 
 - 169.254.0.0/16
 
