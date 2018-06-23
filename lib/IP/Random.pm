@@ -157,9 +157,13 @@ Valid groups:
 
 Limited broadcast address (C<255.255.255.255/32>).
 
+=item rfc1112
+
+Multicast addresses (C<240.0.0.0/4>)
+
 =item rfc1122
 
-Basic protocol design (C<0.0.0.0/8>, C<127.0.0.0/8>, C<240.0.0.0/4>)
+Basic protocol design (C<0.0.0.0/8>, C<127.0.0.0/8>)
 
 =item rfc1918
 
