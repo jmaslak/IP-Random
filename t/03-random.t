@@ -15,7 +15,7 @@ my (@ips) = map { IP::Random::random_ipv4() } 0 .. 2047;
 
 my (@octets) = map { 0 } ( 0 .. 255 );
 for my $ip (@ips) {
-    foreach my $oct ( split(/\./, $ip) ) {
+    foreach my $oct ( split( /\./, $ip ) ) {
         $octets[$oct]++;
     }
 }
@@ -31,8 +31,8 @@ subtest 'randomness', sub {
 };
 
 subtest 'not invalid', sub {
-    is( scalar grep( { $_ =~ m/^0\./ }   @ips ), 0, 'IPs starting with 0.' );
-    is( scalar grep( { $_ =~ m/^10\./ }  @ips ), 0, 'IPs starting with 10.' );
+    is( scalar grep( { $_ =~ m/^0\./ } @ips ),   0, 'IPs starting with 0.' );
+    is( scalar grep( { $_ =~ m/^10\./ } @ips ),  0, 'IPs starting with 10.' );
     is( scalar grep( { $_ =~ m/^240\./ } @ips ), 0, 'IPs starting with 240.' );
     done_testing;
 };
@@ -47,7 +47,24 @@ subtest 'only RFC1112', sub {
           )
     } 0 .. 2047;
 
-    ok( scalar grep( { $_ =~ m/^0\./ } @ips ) > 0, 'IPs starting with 0.' );
+    ok( scalar grep( { $_ =~ m/^0\./ } @ips ) > 0,  'IPs starting with 0.' );
+    ok( scalar grep( { $_ =~ m/^10\./ } @ips ) > 0, 'IPs starting with 10.' );
+    is( scalar grep( { $_ =~ m/^240\./ } @ips ), 0, 'IPs starting with 240.' );
+
+    done_testing;
+};
+
+subtest 'RFC1112 and RFC 1122', sub {
+    (@ips) = map {
+        IP::Random::random_ipv4(
+            additional_types_allowed => [
+                'rfc919',  'rfc1918', 'rfc2544', 'rfc3068', 'rfc3171', 'rfc3927',
+                'rfc5736', 'rfc5737', 'rf6598'
+            ]
+          )
+    } 0 .. 2047;
+
+    is( scalar grep( { $_ =~ m/^0\./ } @ips ), 0, 'IPs starting with 0.' );
     ok( scalar grep( { $_ =~ m/^10\./ } @ips ) > 0, 'IPs starting with 10.' );
     is( scalar grep( { $_ =~ m/^240\./ } @ips ), 0, 'IPs starting with 240.' );
 

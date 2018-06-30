@@ -1,3 +1,4 @@
+## Please see file perltidy.ERR
 #!/usr/bin/perl
 
 #
@@ -41,26 +42,26 @@ use feature 'signatures';
 no warnings 'experimental::signatures';
 
 use Carp;
-use List::Util qw(none notall pairs);
+use List::Util qw(any none notall pairs);
 use Socket qw(inet_aton);
 
-my $DEFAULT_IPV4_EXCLUDE = {
-    '0.0.0.0/8'          => 'rfc1122',
-    '10.0.0.0/8'         => 'rfc1918',
-    '100.64.0.0/10'      => 'rfc6598',
-    '127.0.0.0/8'        => 'rfc1122',
-    '169.254.0.0/16'     => 'rfc3927',
-    '172.16.0.0/12'      => 'rfc1918',
-    '192.0.0.0/24'       => 'rfc5736',
-    '192.0.2.0/24'       => 'rfc5737',
-    '192.88.99.0/24'     => 'rfc3068',
-    '192.168.0.0/16'     => 'rfc1918',
-    '198.18.0.0/15'      => 'rfc2544',
-    '198.51.100.0/24'    => 'rfc5737',
-    '203.0.113.0/24'     => 'rfc5737',
-    '224.0.0.0/4'        => 'rfc3171',
-    '240.0.0.0/4'        => 'rfc1112',
-    '255.255.255.255/32' => 'rfc919',
+my $IPV4_EXCLUDE = {
+    '0.0.0.0/8'          => [ 'default', 'rfc1122' ],
+    '10.0.0.0/8'         => [ 'default', 'rfc1918' ],
+    '100.64.0.0/10'      => [ 'default', 'rfc6598' ],
+    '127.0.0.0/8'        => [ 'default', 'rfc1122' ],
+    '169.254.0.0/16'     => [ 'default', 'rfc3927' ],
+    '172.16.0.0/12'      => [ 'default', 'rfc1918' ],
+    '192.0.0.0/24'       => [ 'default', 'rfc5736' ],
+    '192.0.2.0/24'       => [ 'default', 'rfc5737' ],
+    '192.88.99.0/24'     => [ 'default', 'rfc3068' ],
+    '192.168.0.0/16'     => [ 'default', 'rfc1918' ],
+    '198.18.0.0/15'      => [ 'default', 'rfc2544' ],
+    '198.51.100.0/24'    => [ 'default', 'rfc5737' ],
+    '203.0.113.0/24'     => [ 'default', 'rfc5737' ],
+    '224.0.0.0/4'        => [ 'default', 'rfc3171' ],
+    '240.0.0.0/4'        => [ 'default', 'rfc1112' ],
+    '255.255.255.255/32' => [ 'default', 'rfc919' ],
 };
 
 =func random_ipv4()
@@ -109,8 +110,9 @@ ending in C<.0> and C<255>, you could do something like:
 
 =item exclude
 
-This is an array reference of CIDRs (in string format) to exclude from
-the results.  See C<default_exclude()> for the default list, which
+This is an array reference of CIDRs (in string format) or exclude list
+tags (see the groups listed under L<additional_types_allowed>) to exclude
+from the results.  See C<default_exclude()> for the default list, which
 excludes addresses such as RFC1918 (private) IP addresses.  If passed an
 empty list reference such as C<[]>, it will not exclude any IPs.  This is
 almost certainly not what you desire (since it may return IPs in class D and
@@ -127,6 +129,11 @@ default excludes and add an additional exclude:
 
   my $ipv4 = random_ipv4(
     exclude => [ default_exclude(), '4.2.2.1/32' ] );
+
+or
+
+  my $ipv4 = random_ipv4(
+    exclude => [ 'default', '4.2.2.1/32' ] );
 
 Of course this particular example can also be done with
 the C<additional_exclude> optional parameter.
@@ -149,7 +156,7 @@ This is an array refence of strings that contain the "groups" you do
 not want to exclude by default.  For instance, you may want to use
 some/all RFC1918 addresses.
 
-Valid groups:
+Valid groups (all off the above are also in the C<default> group:
 
 =over 4
 
@@ -264,10 +271,18 @@ sub random_ipv4 ( %args ) {
 #
 # Returns a list ref
 sub _get_ipv4_excludes( $addl_types ) {
-    my @ret = grep {
-        my $k = $_;
-        none { $DEFAULT_IPV4_EXCLUDE->{$k} eq $_ } @{$addl_types}
-    } keys %{$DEFAULT_IPV4_EXCLUDE};
+    my @ret;
+
+  NEXT_EXCLUDE:
+    foreach my $default_exclude ( keys %$IPV4_EXCLUDE ) {
+        foreach my $checktype ( @{ $IPV4_EXCLUDE->{$default_exclude} } ) {
+            if ( any { $_ eq $checktype } @$addl_types ) {
+                # Not excluded.
+                next NEXT_EXCLUDE;
+            }
+        }
+        push @ret, $default_exclude;
+    }
 
     return \@ret;
 }
@@ -386,6 +401,10 @@ Multicast (RFC3171)
 =item 240.0.0.0/4
 
 Reserved for Future Use (RFC 1112, Section 4)
+
+=item 255.255.255.255/32
+
+Braodcast address (RFC919)
 
 =back
 
