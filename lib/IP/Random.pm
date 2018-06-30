@@ -1,4 +1,3 @@
-## Please see file perltidy.ERR
 #!/usr/bin/perl
 
 #
@@ -42,7 +41,7 @@ use feature 'signatures';
 no warnings 'experimental::signatures';
 
 use Carp;
-use List::Util qw(any none notall pairs);
+use List::Util qw(any none notall pairs uniq);
 use Socket qw(inet_aton);
 
 my $IPV4_EXCLUDE = {
@@ -63,6 +62,9 @@ my $IPV4_EXCLUDE = {
     '240.0.0.0/4'        => [ 'default', 'rfc1112' ],
     '255.255.255.255/32' => [ 'default', 'rfc919' ],
 };
+
+# Build cache of valid types
+my %VALID_TYPES = map { $_, 1 } uniq sort map { @$_ } values %$IPV4_EXCLUDE;
 
 =func random_ipv4()
 
@@ -248,8 +250,18 @@ sub random_ipv4 ( %args ) {
           _get_ipv4_excludes( $args{additional_types_allowed} );
     }
 
+    # Expand out tags in exclude list
+    my (@exclude_cidrs) = grep { m/^\d+\.\d+\.\d+\.\d+(:?\/\d+)$/ } @{ $args{exclude} },
+      @{ $args{additional_exclude} };
+
+    my (@exclude_tags) = grep { !m/^\d+\.\d+\.\d+\.\d+(:?\/\d+)$/ } @{ $args{exclude} },
+      @{ $args{additional_exclude} };
+
+    my (@exclude_expanded) = ( @exclude_cidrs, map { @{ _get_ipv4_excludes( $args{additional_types_allowed}, $_ ) } } @exclude_tags );
+
+    my (@exclude_all) = uniq sort @exclude_expanded;
+
     # Build a closure for checking to see if an address is excluded
-    my (@exclude_all) = ( @{ $args{exclude} }, @{ $args{additional_exclude} } );
     my $is_not_excluded = sub($addr) {
         none { in_ipv4_subnet( $_, $addr ) } @exclude_all;
     };
@@ -270,11 +282,24 @@ sub random_ipv4 ( %args ) {
 # of additional types allowed
 #
 # Returns a list ref
-sub _get_ipv4_excludes( $addl_types ) {
+sub _get_ipv4_excludes ( $addl_types, $tag = 'default' ) {
+    foreach my $t (@$addl_types) {
+        if ( !exists( $VALID_TYPES{$t} ) ) {
+            confess("Type '$t' is not a valid type");
+        }
+    }
+    if ( !exists( $VALID_TYPES{$tag} ) ) {
+        confess("Type '$tag' is not a valid type");
+    }
+
     my @ret;
 
   NEXT_EXCLUDE:
     foreach my $default_exclude ( keys %$IPV4_EXCLUDE ) {
+        if ( none { $_ eq $tag } @{ $IPV4_EXCLUDE->{$default_exclude} } ) {
+            next NEXT_EXCLUDE;
+        }
+
         foreach my $checktype ( @{ $IPV4_EXCLUDE->{$default_exclude} } ) {
             if ( any { $_ eq $checktype } @$addl_types ) {
                 # Not excluded.
