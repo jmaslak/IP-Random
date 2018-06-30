@@ -1,8 +1,11 @@
 Wow, you want to help?  That's great!
 
+I'll put together a more detailed version of this, but I'll point you in
+some useful directions that could help with this module.
+
 If you want to help:
 
-  * Don't change the public interface.  You can add to it, but don't
+  * Don't break the public interface.  You can add to it, but don't
     break code that already depends on this interface.
   * I'll take bug reports however you want to send them (RT, Github
     issue, email, etc).  My preference is for Github issues.
@@ -19,8 +22,9 @@ Some things you can do that would make me smile:
     want to do with the module.  Feel free to do any of them (but if it
     is a bigger item, you might jot me a note first so that I don't
     accidentally duplicate your effort!)
-  * Write tests for things that are known to be broken.  Mark those as
-    "todo" tests so that the failures do not cause build failures.
+  * Write tests for things that are known to be broken (UTF-8 file
+    handling, for instance).  Mark those as "todo" tests so that the
+    failures do not cause test failures.
   * Improvements to documentation are always appreciated
   * If the module is missing something you would find useful, or you're
     confused about something, or if it doesn't seem to work the way you

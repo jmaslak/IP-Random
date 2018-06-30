@@ -113,9 +113,13 @@ available:
 
         Limited broadcast address (`255.255.255.255/32`).
 
+    - rfc1112
+
+        Multicast addresses (`240.0.0.0/4`)
+
     - rfc1122
 
-        Basic protocol design (`0.0.0.0/8`, `127.0.0.0/8`, `240.0.0.0/4`)
+        Basic protocol design (`0.0.0.0/8`, `127.0.0.0/8`)
 
     - rfc1918
 
