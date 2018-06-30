@@ -41,7 +41,9 @@ use feature 'signatures';
 no warnings 'experimental::signatures';
 
 use Carp;
-use List::Util qw(any none notall pairs uniq);
+
+# We need a version of List::Util with uniq in it
+use List::Util 1.50 qw(any none notall pairs uniq);
 use Socket qw(inet_aton);
 
 my $IPV4_EXCLUDE = {
