@@ -73,8 +73,9 @@ ending in C<.0> and C<255>, you could do something like:
 
 =item exclude
 
-This is an array reference of CIDRs (in string format) to exclude from
-the results.  See C<default_exclude()> for the default list, which
+This is an array reference of CIDRs (in string format) or exclude list
+tags (see the groups listed under L<additional_types_allowed>) to exclude
+from the results.  See C<default_exclude()> for the default list, which
 excludes addresses such as RFC1918 (private) IP addresses.  If passed an
 empty list reference such as C<[]>, it will not exclude any IPs.  This is
 almost certainly not what you desire (since it may return IPs in class D and
@@ -91,6 +92,11 @@ default excludes and add an additional exclude:
 
   my $ipv4 = random_ipv4(
     exclude => [ default_exclude(), '4.2.2.1/32' ] );
+
+or
+
+  my $ipv4 = random_ipv4(
+    exclude => [ 'default', '4.2.2.1/32' ] );
 
 Of course this particular example can also be done with
 the C<additional_exclude> optional parameter.
@@ -113,7 +119,7 @@ This is an array refence of strings that contain the "groups" you do
 not want to exclude by default.  For instance, you may want to use
 some/all RFC1918 addresses.
 
-Valid groups:
+Valid groups (all off the above are also in the C<default> group:
 
 =over 4
 
@@ -262,6 +268,10 @@ Multicast (RFC3171)
 
 Reserved for Future Use (RFC 1112, Section 4)
 
+=item 255.255.255.255/32
+
+Braodcast address (RFC919)
+
 =back
 
 =head1 SECURITY WARNING
@@ -294,8 +304,6 @@ should be applied afterwards still).
 IPv6 support must be added.  IPv4 is a subset of IPv6, so there should
 be one set of pick functions and the like, with wrappers to handle
 conversion of IPv4 to IPv6 and back, when needed.
-
-I have plans to port this to Perl 6.
 
 =head1 AUTHOR
 

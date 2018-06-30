@@ -466,5 +466,5 @@ IPv6 support must be added.  IPv4 is a subset of IPv6, so there should
 be one set of pick functions and the like, with wrappers to handle
 conversion of IPv4 to IPv6 and back, when needed.
 
-=end
+=cut
 
