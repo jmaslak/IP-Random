@@ -44,7 +44,6 @@ use Carp;
 
 use Exporter;
 @IP::Random::ISA = qw(Exporter);
-@IP::Random::EXPORT = qw();
 @IP::Random::EXPORT_OK = qw(random_ipv4 in_ipv4_subnet default_ipv4_exclude);
 
 # We need a version of List::Util with uniq in it

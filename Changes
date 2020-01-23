@@ -1,5 +1,5 @@
-1.009 - January 23, 2020
-Joelle Maslak <jmaslak@antelope.net>
+1.200230 - January 23, 2020
+ Joelle Maslak <jmaslak@antelope.net>
  * [Bugfix] Was not properly exporting symbols (Github issue #3,
    reported by Lucas1).
 
