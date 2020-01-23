@@ -1,3 +1,8 @@
+1.009 - January 23, 2020
+Joelle Maslak <jmaslak@antelope.net>
+ * [Bugfix] Was not properly exporting symbols (Github issue #3,
+   reported by Lucas1).
+
 1.008 - June 30, 2018
 Joelle Maslak <jmaslak@antelope.net>
  * Was attributig 240.0.0.0/4 to RFC1122 instead of correct RFC1112.

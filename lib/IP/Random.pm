@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #
-# Copyright (C) 2016-2018 Joelle Maslak
+# Copyright (C) 2016-2020 Joelle Maslak
 # All Rights Reserved - See License
 #
 
@@ -41,6 +41,11 @@ use feature 'signatures';
 no warnings 'experimental::signatures';
 
 use Carp;
+
+use Exporter;
+@IP::Random::ISA = qw(Exporter);
+@IP::Random::EXPORT = qw();
+@IP::Random::EXPORT_OK = qw(random_ipv4 in_ipv4_subnet default_ipv4_exclude);
 
 # We need a version of List::Util with uniq in it
 use List::Util 1.50 qw(any none notall pairs uniq);
